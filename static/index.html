@@ -1030,6 +1030,7 @@ async function doRegister() {
   hideMsg('registerError'); hideMsg('registerSuccess');
   if (!name || !email || !password) { showMsg('registerError', 'All fields are required.'); return; }
   if (password.length < 6 || password.length > 10) { showMsg('registerError', 'Password must be 6–10 characters.'); return; }
+  if (!email.endsWith('@gmail.com')) { showMsg('registerError', 'Email must be a valid @gmail.com address.'); return; }  // ← DUGANG
   try {
     const res = await fetch('/api/register', {
       method: 'POST', headers: {'Content-Type':'application/json'},
@@ -1847,7 +1848,7 @@ async function loadAdminUsers() {
             ${['customer','cashier','kitchen','waiter','admin'].map(r =>
               `<option value="${r}" ${r===u.role?'selected':''}>${r}</option>`).join('')}
           </select>
-        
+          
           <button class="btn-xs btn-red" onclick="deleteUser(${u.id})">🗑️</button>
         </td>
       </tr>`).join('') +
