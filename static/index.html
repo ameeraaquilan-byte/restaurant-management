@@ -1232,11 +1232,11 @@ function showPaymentInstructions() {
   if (!el) return;
   if (method === 'GCash' || method === 'Card Payment') {
     el.innerHTML = `<div class="auto-paid-note">
-    
+
     </div>`;
   } else {
     el.innerHTML = `<div class="alert alert-success" style="margin:0;display:flex;align-items:center;gap:0.6rem">
-      <span style="font-size:1.5rem">💵</span>
+      <span style="font-size:1.5rem"></span>
       <div><strong>Cash on Pickup</strong><br/><span style="font-size:0.82rem">Pay at the counter when your order is ready. Cashier will mark as Paid.</span></div>
     </div>`;
   }
