@@ -235,6 +235,8 @@ def register():
             return jsonify({'error': 'All fields are required.'}), 400
         if len(password) < 6 or len(password) > 10:
             return jsonify({'error': 'Password must be 6–10 characters only.'}), 400
+        if not email.endswith('@gmail.com'):
+            return jsonify({'error': 'Email must be a valid @gmail.com address.'}), 400
 
         conn = get_db()
         c = conn.cursor()
@@ -331,11 +333,6 @@ def get_menu_all():
 # ─────────────────────────────────────────────
 # BEST SELLERS ENDPOINT  (Popularity-Based Recommendation)
 # ─────────────────────────────────────────────
-# HOW IT WORKS:
-#   1. Scan all paid orders and count total qty ordered per item name.
-#   2. Only items with total_qty >= 10 qualify as "Best Sellers".
-#   3. Sort by qty descending, return top 8 with full menu details (image, price, etc).
-#   4. Frontend shows these as a "Best Sellers" banner at the top of the homepage.
 
 @app.route('/api/menu/bestsellers', methods=['GET'])
 def get_bestsellers():
@@ -343,11 +340,9 @@ def get_bestsellers():
         conn = get_db()
         c = conn.cursor()
 
-        # Get all paid orders
         c.execute("SELECT items FROM orders WHERE payment_status='Paid'")
         rows = c.fetchall()
 
-        # Count qty per item name
         item_qty = defaultdict(int)
         for row in rows:
             items = json.loads(row['items'])
@@ -357,7 +352,6 @@ def get_bestsellers():
                 if name:
                     item_qty[name] += qty
 
-        # Filter: only items with >= 10 total orders
         MIN_ORDERS = 10
         qualified = {name: qty for name, qty in item_qty.items() if qty >= MIN_ORDERS}
 
@@ -365,10 +359,8 @@ def get_bestsellers():
             conn.close()
             return jsonify({'bestsellers': [], 'min_orders': MIN_ORDERS}), 200
 
-        # Sort by qty desc, top 8
         top_names = sorted(qualified.keys(), key=lambda n: qualified[n], reverse=True)[:8]
 
-        # Fetch full menu details for each
         bestsellers = []
         for name in top_names:
             c.execute("SELECT * FROM menu WHERE name=? AND available=1", (name,))
