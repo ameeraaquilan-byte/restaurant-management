@@ -1232,7 +1232,7 @@ function showPaymentInstructions() {
   if (!el) return;
   if (method === 'GCash' || method === 'Card Payment') {
     el.innerHTML = `<div class="auto-paid-note">
-      ✅ <span>Your order will be automatically marked as <strong>Paid</strong> — no need for cashier action!</span>
+    
     </div>`;
   } else {
     el.innerHTML = `<div class="alert alert-success" style="margin:0;display:flex;align-items:center;gap:0.6rem">
