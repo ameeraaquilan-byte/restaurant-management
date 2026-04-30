@@ -1847,7 +1847,7 @@ async function loadAdminUsers() {
             ${['customer','cashier','kitchen','waiter','admin'].map(r =>
               `<option value="${r}" ${r===u.role?'selected':''}>${r}</option>`).join('')}
           </select>
-          <button class="btn-xs btn-blue" onclick="updateRole(${u.id})">✅ Save</button>
+        
           <button class="btn-xs btn-red" onclick="deleteUser(${u.id})">🗑️</button>
         </td>
       </tr>`).join('') +
